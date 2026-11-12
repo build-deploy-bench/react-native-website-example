@@ -4,6 +4,7 @@
   "installCommand": "sh bench/build.sh install",
   "buildCommand": "sh bench/build.sh build",
   "outputDirectory": "website/build",
+  "cleanUrls": true,
   "rewrites": [{ "source": "/version", "destination": "/version.json" }],
   "headers": [{ "source": "/version", "headers": [{ "key": "Cache-Control", "value": "no-store" }] }],
   "git": { "deploymentEnabled": false }
