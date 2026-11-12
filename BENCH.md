@@ -54,13 +54,13 @@ Docker image (`Dockerfile`): build stage `node:24.22.3-slim`, final stage `caddy
 
 ### Vercel
 
-- Team `build-deploy-bench` `team_oVjpdXNb0OhSfAzc6FSNjen8`. Project `bdb-rn-website` `prj_JiyocyHO49GdRziz0fImgPVNrYlB`, https://bdb-rn-website.vercel.app. No Git link; deploys upload a `git archive` with `vercel deploy --prod`. Build machine: the team default (elastic selection), the same as the other projects; every build so far logged `4 cores, 8 GB (Standard Build Machine)` and ran in `cle1`, not `iad1`. Node 24.22.3 (from `engines.node`).
+- Team `build-deploy-bench` `team_oVjpdXNb0OhSfAzc6FSNjen8`. Project `bdb-rn-website` `prj_JiyocyHO49GdRziz0fImgPVNrYlB`, https://bdb-rn-website.vercel.app. No Git link; deploys upload a `git archive` with `vercel deploy --prod`. Build machine `standard`, selection `fixed`, the same as the other projects; every build so far logged `4 cores, 8 GB (Standard Build Machine)` and ran in `cle1`, not `iad1`. Node 24.22.3 (from `engines.node`).
 - Setup deploy `dpl_3sKbuFa5Gr1W9n1Y29fX76RZQ9cy` (old layout, without `cleanUrls`): READY, install 41 s, build 108 s, `Deploying outputs` 2.4 s. `/version` had the run ID but commit `unknown` (no `BENCH_COMMIT`), and `/docs/*` returned 404, which led to `cleanUrls`.
 - The build cache (about 416 MB, `node_modules` and the Docusaurus cache) is created and uploaded after READY and takes about 47 s. A deploy that starts before the upload ends gets `Previous build caches not available`.
 
 ### Fly.io
 
-- Org `personal`. App `bdb-rn-website`, https://bdb-rn-website.fly.dev. One Machine, `iad`, shared-cpu-1x with 256 MB, always on. Health check `/`.
+- Org `personal`. App `bdb-rn-website`, https://bdb-rn-website.fly.dev. One Machine, `iad`, shared-cpu-1x with 1 GB (the `fly launch` default), always on. Health check `/`.
 - Deploy: `flyctl deploy --config fly.toml -a bdb-rn-website --remote-only --depot=false --ha=false --yes --strategy bluegreen --build-arg BENCH_COMMIT=<sha> --env BENCH_RUN_ID=<id>` from a `git archive`. The build context is 182 MB in 3,571 files; flyctl warns about it.
 - Builder: the org's remote builder `fly-builder-rosy-headland-8386` (shared-cpu-8x, 8 GB), shared by all fixtures.
 - Setup deploy of `ab029f8` without the builder lock, with four other deploys on the builder: `yarn install` failed with `ESOCKETTIMEDOUT` on the 20 MB `react-native-0.87.1.tgz` after 9 minutes of network retries, and the build step then hung, so the deploy was stopped. No release.
