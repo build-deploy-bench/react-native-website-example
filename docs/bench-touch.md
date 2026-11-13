@@ -2,4 +2,4 @@
 unlisted: true
 ---
 
-Bench touch 2026-11-12-full-render-static-medium-r2-003931
+Bench touch 2026-11-12-full-render-static-medium-r3-004216
