@@ -18,9 +18,9 @@ import prismThemeLight from './core/PrismThemeLight';
 import remarkSnackPlayer from '@react-native-website/remark-snackplayer';
 import remarkCodeblockLanguageTitle from '@react-native-website/remark-codeblock-language-as-title';
 
-const isProductionDeployment =
-  (!!process.env.NETLIFY && process.env.CONTEXT === 'production') ||
-  (!!process.env.VERCEL && process.env.VERCEL_ENV === 'production');
+// Benchmark patch: every provider builds the same output. Upstream turns on the expensive module concatenation
+// only when it detects a Netlify or Vercel production deploy, so only Vercel would get it.
+const isProductionDeployment = false;
 
 const lastVersion = versions[0];
 const copyright = `Copyright © Meta Platforms, Inc.`;
@@ -34,7 +34,7 @@ const commonDocsOptions: PluginContentDocs.Options = {
   admonitions: {keywords: ['important'], extendDefaults: true},
   breadcrumbs: false,
   showLastUpdateAuthor: false,
-  showLastUpdateTime: true,
+  showLastUpdateTime: false,
   editUrl: (options => {
     const baseUrl = 'https://github.com/react/react-native-website/edit/main';
     const nextReleasePath = `docs/${options.docPath}`;
@@ -65,9 +65,8 @@ const commonDocsOptions: PluginContentDocs.Options = {
   remarkPlugins: [remarkSnackPlayer, remarkCodeblockLanguageTitle],
 };
 
-const isDeployPreview =
-  process.env.PREVIEW_DEPLOY === 'true' ||
-  (!!process.env.VERCEL && process.env.VERCEL_ENV === 'preview');
+// Benchmark patch: a Vercel preview deployment must not build fewer doc versions than the other providers.
+const isDeployPreview = process.env.PREVIEW_DEPLOY === 'true';
 
 const config: Config = {
   markdown: {
